@@ -1,7 +1,7 @@
 {
   "name": "grunt-confluence-attachments",
   "description": "Grunt plugin to upload attachments to confluence pages",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/Richard-Walker/grunt-confluence-attachments",
   "author": {
     "name": "Richard Walker",
