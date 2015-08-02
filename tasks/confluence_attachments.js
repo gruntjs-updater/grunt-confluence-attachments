@@ -16,7 +16,8 @@ module.exports = function(grunt) {
   var readlineSync = require('readline-sync');
   var fs = require("fs");
 
-  var cookieFile = '.grunt/confluence_attachments/cookies.txt';
+  var cookieFile = '.grunt/confluence_attachments/cookie.txt';
+  var wgetCookieFile = '.grunt/confluence_attachments/wgetcookie.txt';
 
   //
   // CONFLUENCE ATTACHMENTS (main task, public)
@@ -24,11 +25,14 @@ module.exports = function(grunt) {
 
   grunt.registerMultiTask('confluence_attachments', 'Upload attachments to confluence pages', function() {
 
-    if (this.options().baseUrl == null) { grunt.fail.fatal('Option "baseUrl" is not defined'); }
-    if (this.options().pageId == null) { grunt.fail.fatal('Option "pageId" is not defined'); }
+    var options = this.options();
+
+    if (options.baseUrl == null) { grunt.fail.fatal('Option "baseUrl" is not defined'); }
+    if (options.pageId == null) { grunt.fail.fatal('Option "pageId" is not defined'); }
 
     grunt.config('__confluence_upload', { main: this.data });
     grunt.config('__confluence_upload_one.options', this.options());
+    grunt.config('__confluence_get_cookie.options', this.options());
     
     grunt.task.run([
       '__confluence_get_cookie',
@@ -45,6 +49,8 @@ module.exports = function(grunt) {
   grunt.registerTask('__confluence_get_cookie', 'get cookies if not already done', function() {
     var done = this.async();
 
+    var options = this.options();
+
     if (grunt.file.exists(cookieFile)) {
       
       grunt.config('confluence_attachments._cookie', grunt.file.read(cookieFile));
@@ -56,7 +62,7 @@ module.exports = function(grunt) {
       var username = readlineSync.question('Confluence login: ');
       var password = readlineSync.question('Password: ', { hideEchoBack: true });
 
-      rest.post('https://share.emakina.net/dologin.action', {
+      rest.post(options.baseUrl + '/dologin.action', {
         data: {
           os_username : username,
           os_password : password,
@@ -67,8 +73,15 @@ module.exports = function(grunt) {
         if (response.statusCode === 200) {
           var loginResult = response.headers['x-seraph-loginreason'];
           if (loginResult === 'OK') {
+            
             var cookie = response.headers['set-cookie'].join('; ');
             grunt.file.write(cookieFile, cookie);
+
+            // Writing also a wget compatible cookie file
+            var wgetCookie = options.baseUrl.replace(/^http[s]?\:\/\//i,'');
+            wgetCookie += '\tFALSE\t/\tTRUE\t0\t' + cookie.replace(/; /g, '\t');
+            grunt.file.write(wgetCookieFile, wgetCookie);
+
             grunt.config('confluence_attachments._cookie', cookie);
             console.log('Login succesful, cookie set');
             done(true);
