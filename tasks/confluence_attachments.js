@@ -18,7 +18,6 @@ module.exports = function(grunt) {
 
   var cookieFile = '.grunt/confluence_attachments/cookies.txt';
 
-
   //
   // CONFLUENCE ATTACHMENTS (main task, public)
   //
@@ -26,6 +25,7 @@ module.exports = function(grunt) {
   grunt.registerMultiTask('confluence_attachments', 'Upload attachments to confluence pages', function() {
 
     if (this.options().baseUrl == null) { grunt.fail.fatal('Option "baseUrl" is not defined'); }
+    if (this.options().pageId == null) { grunt.fail.fatal('Option "pageId" is not defined'); }
 
     grunt.config('__confluence_upload', { main: this.data });
     grunt.config('__confluence_upload_one.options', this.options());
@@ -113,7 +113,7 @@ module.exports = function(grunt) {
 
       // Queue upload tasks
       sources.forEach(function (src) {
-        grunt.task.run('__confluence_upload_one:' + src + ':' + f.dest);
+        grunt.task.run('__confluence_upload_one:' + src);
       });
 
     });
@@ -125,19 +125,18 @@ module.exports = function(grunt) {
   // UPLOAD A SINGLE ATTACHMENT (private task)
   //
 
-  grunt.registerTask('__confluence_upload_one', 'upload a single attachment', function(src, dest) {
+  grunt.registerTask('__confluence_upload_one', 'upload a single attachment', function(src) {
     var done = this.async();
 
     var options = this.options({
       comment: 'Grunt upload (grunt-confluence-attachments plugin)'
     });
 
-    console.log('Uploading ' + src + ' to ' + dest + '...');
+    console.log('Uploading ' + src + ' to ' + options.pageId + '...');
 
-    var pageId = dest.split('/').shift();
     var cookie = grunt.config('confluence_attachments._cookie');
     var filename = src.split('/').pop();
-    var url = options.baseUrl + '/rest/api/content/' + pageId + '/child/attachment';
+    var url = options.baseUrl + '/rest/api/content/' + options.pageId + '/child/attachment';
     var fileSize = fs.statSync(src).size;
     var file = rest.file(src, null, fileSize, null, null);
     

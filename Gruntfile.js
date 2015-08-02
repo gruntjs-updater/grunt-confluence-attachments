@@ -31,19 +31,14 @@ module.exports = function(grunt) {
     // Configuration to be run (and then tested).
     confluence_attachments: {
       options: {
-        baseUrl: 'https://share.emakina.net'
+        baseUrl: 'https://share.emakina.net',
       },
-      test_simple: {
-        files: {
-          '104693766': 'test/fixtures/*.txt'
-        }
+      test: {
+        options: {
+          pageId: '104693766'
+        },
+        src: 'test/fixtures/*.txt'
       },
-      test_with_expand: {
-        expand: true,
-        cwd:'test/fixtures/',
-        dest: '104693766/',
-        src: '*.txt'
-      }
 
     },
 
@@ -61,6 +56,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
+  grunt.loadNpmTasks('grunt-newer');
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
@@ -68,6 +64,6 @@ module.exports = function(grunt) {
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);
-  //grunt.registerTask('default', ['jshint', 'confluence_attachments:default_options']);
+  grunt.registerTask('new', ['newer:confluence_attachments']);
 
 };

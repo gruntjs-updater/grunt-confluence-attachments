@@ -40,7 +40,14 @@ grunt.initConfig({
 #### options.baseUrl
 Type: `String`
 
+Required
 The base url of the confluence server (e.g. 'https://myserver.com')
+
+#### options.pageId
+Type: `String`
+
+Required
+Upload destination: the id of a confluence page.
 
 
 ### Usage Examples
@@ -52,10 +59,10 @@ Attach all files in a folder to the confluence page which id is 12345
 grunt.initConfig({
   confluence_attachments: {
     options: {
-      baseUrl: 'https://myserver.com'
+      baseUrl: 'https://myserver.com',
+      pageId: '12345'
     },
     src: 'path/to/folder/*',
-    dest: '12345'
   },
 });
 ```
