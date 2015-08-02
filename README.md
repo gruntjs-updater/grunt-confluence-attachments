@@ -41,13 +41,15 @@ grunt.initConfig({
 Type: `String`
 
 Required
-The base url of the confluence server (e.g. 'https://myserver.com')
+
+Base url of the confluence server (e.g. 'https://myserver.com')
 
 #### options.pageId
 Type: `String`
 
 Required
-Upload destination: the id of a confluence page.
+
+Upload destination: the id of a confluence page
 
 
 ### Usage Examples
