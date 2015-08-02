@@ -134,9 +134,10 @@ module.exports = function(grunt) {
 
     console.log('Uploading ' + src + ' to ' + dest + '...');
 
+    var pageId = dest.split('/').shift();
     var cookie = grunt.config('confluence_attachments._cookie');
     var filename = src.split('/').pop();
-    var url = options.baseUrl + '/rest/api/content/' + dest + '/child/attachment';
+    var url = options.baseUrl + '/rest/api/content/' + pageId + '/child/attachment';
     var fileSize = fs.statSync(src).size;
     var file = rest.file(src, null, fileSize, null, null);
     

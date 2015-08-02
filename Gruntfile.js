@@ -33,11 +33,18 @@ module.exports = function(grunt) {
       options: {
         baseUrl: 'https://share.emakina.net'
       },
-      test: {
+      test_simple: {
         files: {
           '104693766': 'test/fixtures/*.txt'
         }
+      },
+      test_with_expand: {
+        expand: true,
+        cwd:'test/fixtures/',
+        dest: '104693766/',
+        src: '*.txt'
       }
+
     },
 
     // Unit tests.
