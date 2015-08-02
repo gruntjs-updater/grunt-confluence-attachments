@@ -51,6 +51,14 @@ Required
 
 Upload destination: the id of a confluence page
 
+#### options.comment
+Type: `String`
+
+Optional
+
+Attachments comment
+
+Default: 'grunt upload'
 
 ### Usage Examples
 
