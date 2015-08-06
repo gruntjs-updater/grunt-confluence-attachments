@@ -72,8 +72,8 @@ grunt.initConfig({
       baseUrl: 'https://myserver.com',
       pageId: '12345'
     },
-    src: 'path/to/folder/*',
-  },
+    src: 'path/to/folder/*'
+  }
 });
 ```
 
